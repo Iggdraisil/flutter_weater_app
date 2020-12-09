@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weater_app/widgets/temperature_unit.dart';
 import 'package:http/http.dart';
 
-import 'delegate.dart';
+import 'widgets/delegate.dart';
 import 'entity/weatherEntity.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Weather app',
-      theme: ThemeData.light(),
+      theme: ThemeData.dark(),
       home: MyHomePage(title: 'Cities Weather'),
     );
   }
@@ -31,7 +32,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   List weatherTargets = List<WeatherEntity>();
   Map<String, dynamic> user;
 
@@ -60,10 +61,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle style = TextStyle(
-      fontSize: 20,
-      fontStyle: FontStyle.italic,
-    );
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -80,10 +77,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(weatherInfo.city, style: style),
-                        Text("${weatherInfo.todayTemperature}", style: style),
-                        Text("${weatherInfo.tomorrowTemperature}", style: style),
-                        Text("${weatherInfo.dayAfterTomorrowTemperature}", style: style),
+                        Container(
+                            width: 125,
+                            child: Text(
+                                weatherInfo.city,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.amber
+                              ),
+                            ),
+                        ),
+                        WeatherInfoWidget(temperature: weatherInfo.todayTemperature),
+                        WeatherInfoWidget(temperature: weatherInfo.tomorrowTemperature),
+                        WeatherInfoWidget(temperature: weatherInfo.dayAfterTomorrowTemperature),
                       ],
                     );
                   }),
@@ -93,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _update,
-        tooltip: 'Increment',
+        tooltip: 'New city',
         child: Icon(Icons.add),
       ),
     );

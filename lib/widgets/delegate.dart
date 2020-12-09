@@ -9,6 +9,10 @@ import 'package:http/http.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   Map _result;
+  DateTime _lastError = DateTime.now();
+
+  @override
+  ThemeData appBarTheme(BuildContext context) => Theme.of(context);
 
   @override
   List<Widget> buildActions(BuildContext context) {
